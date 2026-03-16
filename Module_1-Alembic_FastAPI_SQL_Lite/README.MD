@@ -389,19 +389,64 @@ Saat membaca dokumentasi resmi, coba hubungkan contoh yang ada di module ini den
 
 ### Tugas
 
-Sebagai latihan mandiri, silakan kembangkan:
+Skenario utamanya adalah layanan sederhana untuk **peminjaman buku di perpustakaan**, dibangun di atas pondasi yang sudah ada (FastAPI + SQLModel + SQLite + Alembic).
 
-1. **Tambah kolom baru di User**, misalnya `age: int | None` dan `is_active: bool = True`.
-   - Ubah `models.py` dan `schemas.py` (supaya schema ikut mendukung field baru).
-   - Buat migration baru dengan Alembic untuk menambah kolom di tabel.
-2. **Buat endpoint update dan delete user**:
-   - `PUT /users/{user_id}` → update data user.
-   - `DELETE /users/{user_id}` → menghapus user.
-3. **Buat service baru** (misalnya `Product Service`) di project yang sama:
-   - Buat model `Product` di `models.py` atau file terpisah.
-   - Buat schema Pydantic untuk `Product`.
-   - Tambahkan endpoint CRUD baru di FastAPI.
-   - Kelola struct perubahan tabel dengan Alembic.
+#### Studi Kasus: Layanan Peminjaman Buku
 
-Tujuannya: memahami pola yang sama bisa diulang untuk berbagai *microservice* kecil dengan domain berbeda.
+Bayangkan ada sebuah perpustakaan kampus yang ingin memisahkan sistemnya menjadi beberapa service kecil. Salah satu service yang akan Anda bangun adalah **Library Service**, dengan tanggung jawab:
 
+- Menyimpan data anggota (bisa memanfaatkan atau mengadaptasi `User` yang sudah ada).
+- Menyimpan data buku.
+- Mencatat transaksi peminjaman dan pengembalian buku.
+
+Target utama dari tugas ini adalah membangun API yang bisa:
+
+- Mendaftarkan anggota.
+- Menambahkan buku baru ke katalog.
+- Meminjamkan buku kepada anggota (dengan aturan bisnis sederhana).
+- Mengembalikan buku dan memperbarui statusnya.
+
+#### Rincian Tugas Teknis
+
+1. **Model dan schema untuk Book dan Loan**  
+   Buat dua entitas baru:
+   - `Book` (mis. `id`, `title`, `author`, `stock`, `is_active`).
+   - `Loan` (mis. `id`, `user_id`, `book_id`, `borrowed_at`, `returned_at`, `status`).  
+   Langkah:
+   - Definisikan model SQLModel untuk `Book` dan `Loan`.
+   - Definisikan schema Pydantic untuk operasi CRUD (mis. `BookCreate`, `BookRead`, `LoanCreate`, `LoanRead`).
+   - Buat migration Alembic baru untuk menambahkan tabel `book` dan `loan`.
+
+2. **Endpoint katalog buku**  
+   Buat endpoint untuk mengelola buku:
+   - `POST /books` → menambah buku baru.
+   - `GET /books` → melihat daftar buku (dengan opsi filter `is_active`).
+   - `GET /books/{book_id}` → melihat detail buku.
+   - `PUT /books/{book_id}` → mengubah informasi buku (judul, penulis, stok, status aktif).
+   - `DELETE /books/{book_id}` → menandai buku sebagai tidak aktif / dihapus (boleh soft delete).  
+   Unit test dapat memverifikasi:
+   - Buku yang baru ditambahkan muncul di daftar.
+   - Perubahan stok atau status tercermin di response.
+
+3. **Endpoint peminjaman dan pengembalian buku**  
+   Buat endpoint:
+   - `POST /loans` → membuat transaksi peminjaman.
+   - `POST /loans/{loan_id}/return` → mengembalikan buku.  
+   Aturan bisnis minimal:
+   - Peminjaman hanya boleh dilakukan jika stok buku (`stock`) masih tersedia (> 0).
+   - Saat peminjaman berhasil:
+     - Kurangi `stock` buku.
+     - Simpan `borrowed_at` (waktu sekarang) dan status misalnya `"borrowed"`.
+   - Saat pengembalian:
+     - Set `returned_at` (waktu sekarang).
+     - Tambah lagi `stock` buku.
+     - Ubah status menjadi misalnya `"returned"`.  
+   Unit test bisa menguji:
+   - Stok berkurang saat dipinjam dan kembali normal saat dikembalikan.
+   - Tidak bisa meminjam jika stok 0 (harus error 400/409 dengan pesan yang jelas).
+
+4. **Laporan sederhana**  
+   Tambahkan endpoint untuk kebutuhan laporan:
+   - `GET /loans` → daftar semua peminjaman (dengan opsi filter `status`).
+   - `GET /users/{user_id}/loans` → melihat semua buku yang pernah / sedang dipinjam oleh user tertentu.  
+   Di sini mahasiswa belajar meng-*join* atau meng-`select` data lintas tabel (user, loan, book) menggunakan SQLModel.
