@@ -1,5 +1,8 @@
 ## Membangun User Service dengan FastAPI, SQLModel, Alembic, dan SQLite
 
+![Docker-X-FastAPI](assets/docker-x-fastapi.webp)
+
+
 Module ini dirancang sebagai **bahan** untuk Mata Kuliah *Microservice* sederhana yang dibangun menggunakan:
 
 - **FastAPI** sebagai web framework,
@@ -321,6 +324,8 @@ docker compose down
 ---
 
 ### Hubungan dengan Konsep Microservice
+
+![Database-Per-Service](assets/database-per-service.png)
 
 Dalam arsitektur **microservice**, setiap service biasanya:
 

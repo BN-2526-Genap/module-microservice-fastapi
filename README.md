@@ -1,6 +1,6 @@
 ## Modul Microservice - FastAPI
 
-Repository ini akan berisi **beberapa module** praktikum untuk mata kuliah Microservice berbasis **FastAPI**.
+Repository ini akan berisi **beberapa module** untuk mata kuliah Microservice.
 
 - Setiap module diletakkan dalam folder terpisah di root, misalnya:
   - `Module_1-Alembic_FastAPI_SQL_Lite`
@@ -19,9 +19,7 @@ Repository ini akan berisi **beberapa module** praktikum untuk mata kuliah Micro
     - Pydantic schema
     - Alembic migration
     - (opsional) Docker untuk FastAPI + SQLite
-  - Dokumentasi lengkap: lihat `Module_1-Alembic_FastAPI_SQL_Lite/README.MD`
-
-> Ke depan, jika ada module baru (Module 2, 3, dst), cukup buat folder baru dan tambahkan poin baru di bagian ini.
+  - Dokumentasi lengkap: lihat [Module_1-Alembic_FastAPI_SQL_Lite/README.MD](https://github.com/BN-2526-Genap/module-fast-api/tree/main/Module_1-Alembic_FastAPI_SQL_Lite)
 
 ---
 
@@ -42,18 +40,4 @@ Repository ini akan berisi **beberapa module** praktikum untuk mata kuliah Micro
 
 3. Ikuti langkah-langkah yang sudah dijelaskan di `README.MD` di dalam module tersebut.
 
----
-
-### Catatan untuk Pengembangan ke Depan
-
-- Jika nanti Anda membuat:
-  - `Module_2-Auth_JWT_PostgreSQL`
-  - `Module_3-Message_Broker_RabbitMQ`
-  - dan lain-lain…
-- Cukup:
-  1. Buat folder baru dengan nama yang konsisten (`Module_2-...`).
-  2. Tambahkan `README.MD` di dalamnya.
-  3. Update daftar module di `README.MD` root ini.
-
-Dengan pola seperti ini, dosen/mahasiswa bisa langsung melihat **overview semua module** dari README root, dan detail teknisnya tetap rapi di dalam masing-masing submodule.
 
