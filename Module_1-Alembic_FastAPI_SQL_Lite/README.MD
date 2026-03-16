@@ -389,6 +389,8 @@ Saat membaca dokumentasi resmi, coba hubungkan contoh yang ada di module ini den
 
 ### Tugas
 
+Link Github Classroom : https://classroom.github.com/a/aTHlaT1F 
+
 Skenario utamanya adalah layanan sederhana untuk **peminjaman buku di perpustakaan**, dibangun di atas pondasi yang sudah ada (FastAPI + SQLModel + SQLite + Alembic).
 
 #### Studi Kasus: Layanan Peminjaman Buku
